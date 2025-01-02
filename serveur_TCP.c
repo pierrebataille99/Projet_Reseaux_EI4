@@ -8,7 +8,10 @@
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-void traiter_commande(int client_fd, char *commande) {
+
+
+void traiter_commande(int client_fd, char *commande)
+{
     int id_client, id_compte;
     char password[20];
     char action[20];
@@ -24,40 +27,55 @@ void traiter_commande(int client_fd, char *commande) {
 
     Compte *compte = trouver_compte(id_client, id_compte, password);
 
-    if (compte == NULL) {
+    if (compte == NULL)
+    {
         send(client_fd, "KO : Compte ou mot de passe incorrect\n", 38, 0);
         return;
     }
 
-    if (strcmp(action, "SOLDE") == 0) {
+    if (strcmp(action, "SOLDE") == 0)
+    {
         char response[BUFFER_SIZE];
         snprintf(response, sizeof(response), "RES_SOLDE %.2f\n", compte->solde);
         send(client_fd, response, strlen(response), 0);
-    } else if (strcmp(action, "AJOUT") == 0) {
+
+
+    } else if (strcmp(action, "AJOUT") == 0)
+    {
         compte->solde += montant;
         ajouter_operation(compte, "AJOUT");
         send(client_fd, "OK\n", 3, 0);
-    } else if (strcmp(action, "RETRAIT") == 0) {
-        if (compte->solde >= montant) {
+
+
+    } else if (strcmp(action, "RETRAIT") == 0)
+    {
+        if (compte->solde >= montant)
+        {
             compte->solde -= montant;
             ajouter_operation(compte, "RETRAIT");
             send(client_fd, "OK\n", 3, 0);
-        } else {
+        } else
+        {
             send(client_fd, "KO : Solde insuffisant\n", 23, 0);
         }
-    } else if (strcmp(action, "OPERATIONS") == 0) {
+
+    } else if (strcmp(action, "OPERATIONS") == 0)
+    {
         char response[BUFFER_SIZE] = "RES_OPERATIONS\n";
-        for (int i = 0; i < compte->operations_count; i++) {
+        for (int i = 0; i < compte->operations_count; i++)
+        {
             strcat(response, compte->operations[i]);
             strcat(response, "\n");
         }
         send(client_fd, response, strlen(response), 0);
-    } else {
+    } else
+    {
         send(client_fd, "KO : Commande inconnue\n", 23, 0);
     }
 }
 
-int main() {
+int main()
+{
     int server_fd, client_fd;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
@@ -71,21 +89,25 @@ int main() {
     bind(server_fd, (struct sockaddr *)&address, sizeof(address));
     listen(server_fd, 3);
 
-    printf("Serveur en attente de connexions sur le port %d...\n", PORT);
+    printf("Serveur en attente de co sur le port %d...\n", PORT);
 
-    while (1) {
+    while (1)
+    {
         client_fd = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-        if (client_fd < 0) {
+        if (client_fd < 0)
+        {
             perror("Erreur lors de l'acceptation");
             continue;
         }
 
         printf("Client connecté.\n");
-        while (1) {
+        while (1)
+        {
             // Lire les données envoyées par le client
             memset(buffer, 0, BUFFER_SIZE);
             int bytes_read = read(client_fd, buffer, BUFFER_SIZE);
-            if (bytes_read <= 0) {
+            if (bytes_read <= 0)
+            {
                 printf("Client déconnecté.\n");
                 break;
             }

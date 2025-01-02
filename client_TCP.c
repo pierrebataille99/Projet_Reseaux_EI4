@@ -4,13 +4,14 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define PORT 8080
+#define PORT 8080     //port local
 #define BUFFER_SIZE 1024
 
 
 
 
-int main() {
+int main()
+{
     int sock;
     struct sockaddr_in serv_addr;
     char buffer[BUFFER_SIZE] = {0};
@@ -47,10 +48,18 @@ int main() {
 
 
     // Boucle pour envoyer plusieurs commandes
-    while (1) {
-        printf("\nEntrez une commande (ex : AJOUT 1 1001 pass123 100.0) : ");
-        fgets(commande, BUFFER_SIZE, stdin);
-        commande[strcspn(commande, "\n")] = 0; // Supprime le caractère de nouvelle ligne
+    while (1)
+{
+    printf("\nEntrez une commande client; exemple :\n\n"
+           "AJOUT id_client id_compte MDP montant\n"
+           "RETRAIT id_client id_compte MDP montant\n"
+           "SOLDE id_client id_compte MDP\n"
+           "OPERATIONS id_client id_compte MDP\n");
+
+    printf("\nRequete: ");
+    fgets(commande, BUFFER_SIZE, stdin);
+
+    commande[strcspn(commande, "\n")] = 0; // Supprime le caractère de nouvelle ligne
 
         // Si l'utilisateur tape "exit", on quitte
         if (strcmp(commande, "exit") == 0) {
