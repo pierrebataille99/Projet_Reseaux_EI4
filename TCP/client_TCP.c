@@ -50,7 +50,8 @@ int main()
     // Boucle pour envoyer plusieurs commandes
     while (1)
 {
-    printf("\nEntrez une commande client; exemple :\n\n"
+    printf("########################################################################################");
+    printf("\n\n\nEntrez une commande client; exemple :\n\n"
            "AJOUT id_client id_compte MDP montant\n"
            "RETRAIT id_client id_compte MDP montant\n"
            "SOLDE id_client id_compte MDP\n"
